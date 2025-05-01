@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/playlist.m3u", "dest": "/api/playlist.js" },
+    { "src": "/epg.xml", "dest": "/api/epg.js" }
+  ]
+}
