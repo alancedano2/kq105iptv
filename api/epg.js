@@ -1,37 +1,32 @@
 export default function handler(req, res) {
-  res.setHeader("Content-Type", "application/xml");
-  const now = new Date();
-  const baseDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-  const pad = n => String(n).padStart(2, "0");
+  const xml = `<?xml version="1.0" encoding="UTF-8" ?>
+<tv generator-info-name="kq105.vercel.app">
+  <channel id="kq105tv">
+    <display-name>KQ105 TV</display-name>
+    <icon src="https://bloximages.chicago2.vip.townnews.com/kq105.com/content/tncms/custom/image/23c304fa-a5bb-11ee-aed9-ab40ab64f7be.png" />
+  </channel>
 
-  const getTime = (h) => {
-    const date = new Date(baseDate.getTime() + h * 3600000);
-    return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}${pad(date.getUTCHours())}0000 +0000`;
-  };
+  <programme start="20250501040000 -0400" stop="20250501010000 -0400" channel="kq105tv">
+    <title lang="es">Videos Musicales Powered by KQ105</title>
+  </programme>
+  <programme start="20250501010000 -0400" stop="20250501060000 -0400" channel="kq105tv">
+    <title lang="es">KQ Al Aire con Héctor Ortiz</title>
+  </programme>
+  <programme start="20250501060000 -0400" stop="20250501110000 -0400" channel="kq105tv">
+    <title lang="es">KQOnline con Alex Diaz</title>
+  </programme>
+  <programme start="20250501110000 -0400" stop="20250501140000 -0400" channel="kq105tv">
+    <title lang="es">La Tendencia de Molusco con Ali, Pamela y Robert</title>
+  </programme>
+  <programme start="20250501140000 -0400" stop="20250501150000 -0400" channel="kq105tv">
+    <title lang="es">KQ Al Aire con Pedro Villegas</title>
+  </programme>
+  <programme start="20250501150000 -0400" stop="20250502040000 -0400" channel="kq105tv">
+    <title lang="es">Videos Musicales Powered by KQ105</title>
+  </programme>
+</tv>`;
 
-  const schedule = [
-    { start: 0, end: 6, title: "Videos Musicales Powered by KQ105" },
-    { start: 6, end: 10, title: "KQ Al Aire con Héctor Ortiz" },
-    { start: 10, end: 15, title: "KQOnline con Alex Diaz" },
-    { start: 15, end: 18, title: "La Tendencia de Molusco con Ali, Pamela y Robert" },
-    { start: 18, end: 19, title: "KQ Al Aire con Pedro Villegas" },
-    { start: 19, end: 24, title: "Videos Musicales Powered by KQ105" }
-  ];
-
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-  xml += `<tv generator-info-name="KQ105 EPG" source-info-name="KQ105" source-info-url="https://kq105.vercel.app">\n`;
-  xml += `<channel id="kq105tv">\n`;
-  xml += `<display-name>KQ105 TV</display-name>\n`;
-  xml += `<icon src="https://bloximages.chicago2.vip.townnews.com/kq105.com/content/tncms/custom/image/23c304fa-a5bb-11ee-aed9-ab40ab64f7be.png" />\n`;
-  xml += `</channel>\n`;
-
-  for (const slot of schedule) {
-    xml += `<programme start="${getTime(slot.start)}" stop="${getTime(slot.end)}" channel="kq105tv">\n`;
-    xml += `<title lang="es">${slot.title}</title>\n`;
-    xml += `<desc lang="es">${slot.title}</desc>\n`;
-    xml += `</programme>\n`;
-  }
-
-  xml += `</tv>`;
-  res.send(xml);
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.status(200).send(xml);
 }
